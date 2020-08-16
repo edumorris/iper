@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from .models import *
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Profile(models.Model):
     user = models.OneToOneField(User, blank=True, default=0000, on_delete=models.CASCADE)
@@ -40,7 +41,7 @@ class Profile(models.Model):
 class Projects(models.Model):
     project = models.CharField(max_length = 50)
     project_description = models.CharField(max_length = 1000)
-    for_profile = models.OneToOneField(Profile)
+    for_profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     repository_link = models.CharField(max_length = 200)
     pub_date = models.DateTimeField(auto_now_add=True)
 
@@ -66,12 +67,12 @@ class Comments(models.Model):
 class Review(models.Model):
     for_project = models.ForeignKey(Projects, on_delete=models.CASCADE)
     submitted_date = models.DateTimeField(auto_now_add=True)
-    user_interface = models.IntegerField(min_value=1, max_value=10)
-    user_experience = models.IntegerField(min_value=1, max_value=10)
-    responsiveness = models.IntegerField(min_value=1, max_value=10)
+    user_interface = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)]) # models.IntegerField(min_value=1, max_value=10)
+    user_experience = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)]) # models.IntegerField(min_value=1, max_value=10)
+    responsiveness = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)]) # models.IntegerField(min_value=1, max_value=10)
     design_average = models.IntegerField()
-    functionality = models.IntegerField(min_value=1, max_value=10)
-    io = models.IntegerField(min_value=1, max_value=10)
+    functionality = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)]) # models.IntegerField(min_value=1, max_value=10)
+    io = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)]) # models.IntegerField(min_value=1, max_value=10)
     usability_average = models.IntegerField()
     content_average = models.IntegerField()
     total_average = models.IntegerField()
