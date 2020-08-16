@@ -37,12 +37,54 @@ class Profile(models.Model):
     def save_user_profile(self, sender, instance, **kwargs):
         instance.profile.save()
 
+class Projects(models.Model):
+    project = models.CharField(max_length = 50)
+    project_description = models.CharField(max_length = 1000)
+    for_profile = models.OneToOneField(Profile)
+    repository_link = models.CharField(max_length = 200)
+    pub_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.project
+    
+    def save_profile(self):
+        self.save()
+    
+    def delete_profile(self):
+        self.delete()
+    
+    def update_profile(self):
+        pass
+
 class Comments(models.Model):
-    for_comment = models.IntegerField()
+    for_profile = models.ForeignKey(Projects, on_delete=models.CASCADE)
     comment = models.CharField(max_length = 500)
 
     def __str__(self):
         return self.comment
 
-class Projects(models.Model):
-    pass
+class Review(models.Model):
+    for_project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    submitted_date = models.DateTimeField(auto_now_add=True)
+    user_interface = models.IntegerField(min_value=1, max_value=10)
+    user_experience = models.IntegerField(min_value=1, max_value=10)
+    responsiveness = models.IntegerField(min_value=1, max_value=10)
+    design_average = models.IntegerField()
+    functionality = models.IntegerField(min_value=1, max_value=10)
+    io = models.IntegerField(min_value=1, max_value=10)
+    usability_average = models.IntegerField()
+    content_average = models.IntegerField()
+    total_average = models.IntegerField()
+
+    def __str__(self):
+        return self.total_average
+    
+    def save_profile(self):
+        self.save()
+    
+    def delete_profile(self):
+        self.delete()
+    
+    def update_profile(self):
+        pass
+
