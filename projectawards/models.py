@@ -48,17 +48,17 @@ class Projects(models.Model):
     def __str__(self):
         return self.project
     
-    def save_profile(self):
+    def save_project(self):
         self.save()
     
-    def delete_profile(self):
+    def delete_project(self):
         self.delete()
     
-    def update_profile(self):
+    def update_project(self):
         pass
 
 class Comments(models.Model):
-    for_profile = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    for_project = models.ForeignKey(Projects, on_delete=models.CASCADE)
     comment = models.CharField(max_length = 500)
 
     def __str__(self):
@@ -80,12 +80,27 @@ class Review(models.Model):
     def __str__(self):
         return self.total_average
     
-    def save_profile(self):
+    def save_review(self):
         self.save()
     
-    def delete_profile(self):
+    def delete_review(self):
         self.delete()
     
-    def update_profile(self):
+    def update_review(self):
         pass
 
+class Followers(models.Model):
+    for_profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    follower = models.ManyToManyField(Profile)
+    
+    def __str__(self):
+        return self.follower
+    
+    def save_follower(self):
+        self.save()
+    
+    def delete_follower(self):
+        self.delete()
+    
+    def update_follower(self):
+        pass
