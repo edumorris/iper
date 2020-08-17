@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'fontawesome_5',
     'material',
     'tinymce',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
