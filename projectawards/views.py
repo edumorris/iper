@@ -4,6 +4,13 @@ from .models import Profile, Projects
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 
+# RestAPI Framework
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializer import ProjectsSerializers, ProfileSerializers
+from rest_framework import status
+from .permissions import IsAdminOrReadOnly
+
 # from .email import send_welcome_email
 
 # Create your views here.
@@ -56,3 +63,37 @@ def profile_update(request, user_id):
         form = ProfileForm()
     
     return render(request, 'profile_update.html', {"ProfileForm": form, "title": title, "profile": profile})
+
+# API Functionality
+class ProjectsList(APIView):
+    def get(self, request, format=None):
+        permission_classes = (IsAdminOrReadOnly)
+        all_projects = Projects.objects.all()
+        serializers = ProjectsSerializers(all_projects, many=True)
+        return Response(serializers.data)
+    
+    def post(self, request, format=None):
+        permission_classes = (IsAdminOrReadOnly)
+        serializers = ProjectsSerializers(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileList(APIView):
+    def get(self, request, format=None):
+        permission_classes = (IsAdminOrReadOnly)
+        all_profiles = Profile.objects.all()
+        serializers = ProfileSerializers(all_profiles, many=True)
+        return Response(serializers.data)
+    
+    def post(self, request, format=None):
+        permission_classes = (IsAdminOrReadOnly)
+        serializers = ProfileSerializers(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)

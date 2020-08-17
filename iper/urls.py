@@ -22,14 +22,21 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 from django.conf import settings
 from django.views.static import serve
+# RestAPI authentication
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('projectawards.urls')),
+    # Accounts
     url(r'^accounts/', include('django_registration.backends.one_step.urls')),
     # url(r'^accounts/login/$', v.login, {"next_page": '/'}),
     url(r'^accounts/', include('django.contrib.auth.urls')),
+    # Favicon
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('img/favicon.ico'))),
+    # Static fixes
     url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
+    # RestAPI Authentication
+    url(r'^api-token-auth/', obtain_auth_token)
 ]
