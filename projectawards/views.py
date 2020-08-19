@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from .models import Profile, Projects
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileForm
+from .forms import ProfileForm, ProjectsForm
 
 # RestAPI Framework
 from rest_framework.response import Response
@@ -18,15 +18,16 @@ def index_test(request):
     title = "Iper testpage"
 
     return render(request, 'index.html', {"title": title})
-
+    
+@login_required(login_url='/accounts/login')
 def home(request):
-    latest_projects = Projects.objects.order_by('-id').select_related('profile').all()
     current_user = request.user
     profile = Profile.objects.get(user = current_user.id)
 
     current_user = request.user
+    title = "Home"
 
-    return render(request, 'home.html', {"latest_pics": latest_pics, "current_user": current_user, "profile": profile})
+    return render(request, 'home.html', {"current_user": current_user, "profile": profile, "title": title})
 
 @login_required(login_url='/accounts/login')
 def profile(request, user_id):
@@ -63,6 +64,29 @@ def profile_update(request, user_id):
         form = ProfileForm()
     
     return render(request, 'profile_update.html', {"ProfileForm": form, "title": title, "profile": profile})
+
+@login_required(login_url='/accounts/login')
+def project_upload(request, user_id):
+    prof_user = Profile.objects.get(user=user_id)
+    
+    title = "Project Upload"
+    profile = Profile.objects.get(user = user_id)
+
+    if request.method == 'POST':
+        form = ProjectsForm(request.POST)
+        if form.is_valid():
+            project_name = form.cleaned_data['project']
+            project_description = form.cleaned_data['description']
+            project_repo = form.cleaned_data['repo']
+
+            new_project = Projects(project = project_name, project_description = project_description, repository_link = project_repo, project_owner = prof_user)
+            new_project.save_project()
+
+            return redirect(home)
+    else:
+        form = ProjectsForm()
+    
+    return render(request, 'project_upload.html', {"title": title, "ProjectUploadForm": form, "profile": profile})
 
 # API Functionality
 class ProjectsList(APIView):

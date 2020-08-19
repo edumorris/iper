@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^index/$', views.index_test, name='index'),
     url(r'^profile/(\d+)', views.profile, name='profile'),
     url(r'^profile_update/(\d+)', views.profile_update, name='profile_update'),
+    url(r'^project_upload/(\d+)', views.project_upload, name='project_upload'),
     # url(r'^like/(\d+)', views.likes, name='liking'),
     # APIs
     url(r'^api/projects/$', views.ProjectsList.as_view()),

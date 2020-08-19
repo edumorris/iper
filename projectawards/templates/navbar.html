@@ -47,7 +47,7 @@
                                 <p class="dropdown-item text-center"><mark>{{ current_user }}</mark></p>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'profile' user.id %}">Dashboard</a>
-                                <a class="dropdown-item" href="{% url 'image_upload' user.id %}">Upload Image</a>
+                                <a class="dropdown-item" href="{% url 'project_upload' user.id %}">Project Upload</a>
                                 <a class="dropdown-item" href="{% url 'profile_update' user.id %}">Edit Profile</a>
                                 <a class="dropdown-item" href="#">Change Password</a>
                                 <a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}">Log Out</a>

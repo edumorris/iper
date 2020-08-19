@@ -30,18 +30,18 @@ class Profile(models.Model):
     
     
     @receiver(post_save, sender=User)
-    def create_or_update_user_profile(self, sender, instance, created, **kwargs):
+    def create_or_update_user_profile(sender, instance, created, **kwargs):
         if created:
             Profile.objects.create(user=instance)
     
     @receiver(post_save, sender=User)
-    def save_user_profile(self, sender, instance, **kwargs):
+    def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
 
 class Projects(models.Model):
     project = models.CharField(max_length = 50)
     project_description = models.CharField(max_length = 1000)
-    for_profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    project_owner = models.OneToOneField(Profile, on_delete=models.CASCADE)
     repository_link = models.CharField(max_length = 200)
     pub_date = models.DateTimeField(auto_now_add=True)
 
@@ -91,7 +91,7 @@ class Review(models.Model):
 
 class Followers(models.Model):
     for_profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    follower = models.ManyToManyField(Profile)
+    follower_id = models.IntegerField()
     
     def __str__(self):
         return self.follower
