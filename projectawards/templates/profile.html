@@ -12,7 +12,7 @@
             <div class="profile-part">
                 <div class="profile-image">
                     <div class="the-profile-image">
-                        <img src="{{ MEDIA_URL }}/pics/profiles/{{ profile.prof_photo }}" alt="Profile Photo">
+                        <img src="{{ MEDIA_URL }}pics/profiles/{{ profile.prof_photo }}" alt="Profile Photo">
                     </div>
                     <div class="the-profile-name text-center">
                         <i>{{ current_user.username }}</i>
@@ -41,25 +41,33 @@
             </div>
             <hr>
             <div class="container-fluid">
-                <div class="profile-images">
-                    {% if imgs %}
-                        {% for img in imgs %}
-                            <div class="card img-card text-center">
-                                <img class="prof_imgs" src="{{ img.image.url }}" alt="{{ img.img_name }}">
-                                <div class="card-body">
-                                    <p class="card-text">{{img.img_caption}}</p>
-                                </div>
-                                <div class="card-footer">
-                                    <span class="text-left">{{img.likes}} <i class="fas fa-thumbs-up"></i></span> | <span
-                                        class="text-right">{{img.comments | length }} <i class="fas fa-comment"></i></span>
-                                </div>
-                            </div>
-                        {% endfor %}
+                <div class="profile-projects">
+                    {% if projects %}
+                        <table class="table projects-table">
+                            <thead>
+                                <tr class="table-header">
+                                    <th class="tleft">Project Name</th>
+                                    <th class="tcenter">Project Description</th>
+                                    <th class="tright">Project Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {% for proj in projects %}
+                                        <td class="tleft">{{proj.project}}</td>
+                                        <td class="tcenter">{{proj.project_description}}</td>
+                                        <td class="tright">
+                                            <a class="btn btn-info" href="{{proj.repository_link}}">View Project</a>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
                     {% else %}
                     <div class="jumbotron jumbotron-fluid">
                         <div class="container">
-                          <h1 class="display-3">No Photo's Upload</h1>
-                          <p class="lead">You can upload photosfrom your profile menu at the top.</p>
+                          <h1 class="display-3">No Projects Submitted</h1>
+                          <p class="lead">You can upload projects from your profile menu at the top.</p>
                         </div>
                     </div>
                     {% endif %}

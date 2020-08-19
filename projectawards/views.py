@@ -33,9 +33,10 @@ def home(request):
 def profile(request, user_id):
     
     current_user = request.user
-    imgs = Image.objects.filter(profile = current_user.id)
+    my_projects = Projects.objects.filter(project_owner = user_id).order_by('-id')
+    
     profile = Profile.objects.get(user = user_id)
-    return render(request, 'profile.html', {"current_user": current_user, "imgs": imgs, "profile": profile})
+    return render(request, 'profile.html', {"current_user": current_user, "profile": profile, "projects": my_projects})
 
 @login_required(login_url='/accounts/login')
 def profile_update(request, user_id):
