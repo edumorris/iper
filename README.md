@@ -2,7 +2,7 @@
 Week 3 IP Python - IP Ranker
 
 # Project Description
-Python application consuming a News API to display news
+Python application for software project reviews
 
 ## Live URL
 [IPER](https://newser-news.herokuapp.com/)
