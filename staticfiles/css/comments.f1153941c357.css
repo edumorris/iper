@@ -1,0 +1,13 @@
+.container {
+    margin: 20px auto;
+}
+
+.previous-comments{
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+.comment-form {
+    width: 65%;
+    margin: 0 auto;
+}

@@ -1,0 +1,23 @@
+.navbar {
+    background: #11998e; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #11998e, #38ef7d); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #11998e, #38ef7d); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    margin-bottom: 5px;
+    box-shadow: 0px 2px 10px 5px rgba(0,0,0,0.75);
+}
+
+.navbar-brand {
+    color: #ffffff !important;
+}
+
+.logo-image {
+    background: white;
+}
+
+#form-input-area {
+    display: none;
+}
+
+#navbar-list-4 {
+    margin-right: 70px;
+}
