@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
-from .models import Profile, Projects, Comments
+from .models import Profile, Projects, Comments, Review
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileForm, ProjectsForm, CommentForm
+from .forms import ProfileForm, ProjectsForm, CommentForm, ReviewForm
 
 # RestAPI Framework
 from rest_framework.response import Response
@@ -113,6 +113,41 @@ def commenting(request, project_id, user_id):
         form = CommentForm()
     
     return render(request, 'comments.html', {"title": title, "CommentForm": form, "project": project, "old_comments": old_comments, "profile": profile})
+
+@login_required(login_url='/accounts/login')
+def reviewing(request, project_id, user_id):
+    current_user = request.user
+    title = "Review"
+
+    profile = Profile.objects.get(user = user_id)
+    project = Projects.objects.get(id = project_id)
+
+    old_comments = Comments.objects.filter(for_project = project_id).all()
+    old_reviews = Review.objects.filter(for_project = project_id).all()
+    
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            ui = form.cleaned_data['ui']
+            ux = form.cleaned_data['ux']
+            screen_reponse = form.cleaned_data['screens']
+            functions = form.cleaned_data['functions']
+            input_output = form.cleaned_data['io']
+            content = form.cleaned_data['content']
+
+            des_av = ("%.2f" % ((ui+ux+screen_reponse)/3))
+            usability_av = ("%.2f" % ((functions+input_output)/2))
+            total = ("%.2f" % ((float(des_av)+float(usability_av)+content)/3))
+
+            add_review = Review(for_project = project, submitted_by = profile, user_interface = ui, user_experience = ux, responsiveness = screen_reponse, design_average = float(des_av), functionality = functions, io = input_output, usability_average = float(usability_av), content_average = content, total_average = float(total))
+            add_review.save()
+
+            return redirect(home)
+    else:
+        form = ReviewForm()
+    
+    return render(request, 'review.html', {"title": title, "ReviewForm": form, "project": project, "old_reviews": old_reviews, "profile": profile})
+
 
 
 # API Functionality

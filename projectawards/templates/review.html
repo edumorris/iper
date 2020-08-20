@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% include 'material/includes/material_css.html' %}
+{% include 'material/includes/material_js.html' %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/review.css' %}">
+{% endblock %}
+
+{% block content %}
+    {{block.super}}
+
+    <head>
+        <script>
+            alert("Submit A Review Between 1 (Lowest) and 10 (Highest)!")
+        </script>
+    </head>
+    <div class="container">
+        {% if user.is_authenticated %}
+        <div class="review-form-area">
+            <form class="review-form" action="{% url 'reviewing' project.id profile.id %}" method="POST"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% bootstrap_form ReviewForm %}
+                <div class="form-group text-center">
+                    <input type="submit" value="Submit Review" class="btn btn-outline-primary">
+                </div>
+            </form>
+        </div>
+        <hr>
+        <div class="past-reviews">
+            <!--Table-->
+            <table id="tablePreview" class="table table-hover table-sm">
+                <!--Table head-->
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>UI</th>
+                        <th>UX</th>
+                        <th>RESPONSIVENESS</th>
+                        <th class="average">DESIGN SCORE</th>
+                        <th>FUNCTIONALITY</th>
+                        <th>I/O</th>
+                        <th class="average">USABILITY SCORE</th>
+                        <th class="average">CONTENT SCORE</th>
+                        <th class="average total">TOTAL AVERAGE</th>
+                    </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
+                    {% for review in old_reviews %}
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>{{review.user_interface}}</td>
+                            <td>{{review.user_experience}}</td>
+                            <td>{{review.responsiveness}}</td>
+                            <td class="average">{{review.design_average}}</td>
+                            <td>{{review.functionality}}</td>
+                            <td>{{review.io}}</td>
+                            <td class="average">{{review.usability_average}}</td>
+                            <td class="average">{{review.content_average}}</td>
+                            <td class="average total">{{review.total_average}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-3">Login To Review Projects</h1>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

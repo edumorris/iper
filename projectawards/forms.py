@@ -15,3 +15,12 @@ class ProjectsForm(forms.Form):
 
 class CommentForm(forms.Form):
     comment = forms.CharField(label = 'Comments:', max_length=2000)
+
+class ReviewForm(forms.Form):
+    ui = forms.IntegerField(label = 'User Interface:', max_value=10, min_value=1)
+    ux = forms.IntegerField(label = 'User Experience:', max_value=10, min_value=1)
+    screens = forms.IntegerField(label = 'Screen Reponsiveness:', max_value=10, min_value=1)
+    functions = forms.IntegerField(label = 'Project Functionality:', max_value=10, min_value=1)
+    io = forms.IntegerField(label = 'Input/Output Accuracy:', max_value=10, min_value=1)
+    content = forms.IntegerField(label = 'Content:', max_value=10, min_value=1)
+    # total = forms.ChoiceField(choices=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
