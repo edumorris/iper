@@ -7,15 +7,39 @@
 
 {% block content %}
     {{block.super}}
-    <div class="jumbotron">
-        <h1 class="display-3">Hello, world!</h1>
-        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for
-                        calling extra attention to featured content or information.</p>
-        <hr class="my-2">
-        <p>It uses utility classes for typography and
-           spacing to space content out within the larger container.</p>
-        <p class="lead">
-          <a class="btn btn-primary btn-lg" href="#!" role="button">Some action</a>
-        </p>
+    
+    <div class="container projects-container">
+        {% if projects %}
+            {% for project in projects %}
+                <div class="card">
+                    <div class="card-header">
+                        <div class="project-title">
+                            <h3 class="card-header text-left">{{project.project}}</h3>
+                        </div>
+                        <span class="text-right project-owner"><i>{{project.project_owner}}</i></span>
+                    </div>
+                    <div class="card-body text-center">
+                        <a href="{{project.repository_link}}">{{project.project_description}}</a>
+                    </div>
+                    <div class="card-footer footer-content">
+                        <div class="comments-button">
+                            <a href="{% url 'commenting' project.id profile.id %}" class="float-left">
+                                <i class="far fa-comment-alt"></i>
+                            </a>
+                        </div>
+                        <div class="review-button">
+                            <a href="" class="btn btn-warning float-right">Review Project</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-3">No Projects Uploaded</h1>
+                    <p class="lead">Projects will be seen here as soon as they are uploaded.</p>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock%}

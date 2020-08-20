@@ -60,6 +60,8 @@ class Projects(models.Model):
 class Comments(models.Model):
     for_project = models.ForeignKey(Projects, on_delete=models.CASCADE)
     comment = models.CharField(max_length = 500)
+    submitted_by = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    submitted_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.comment
@@ -67,6 +69,7 @@ class Comments(models.Model):
 class Review(models.Model):
     for_project = models.ForeignKey(Projects, on_delete=models.CASCADE)
     submitted_date = models.DateTimeField(auto_now_add=True)
+    submitted_by = models.ForeignKey(Profile, on_delete=models.CASCADE)
     user_interface = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)]) # models.IntegerField(min_value=1, max_value=10)
     user_experience = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)]) # models.IntegerField(min_value=1, max_value=10)
     responsiveness = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(10)]) # models.IntegerField(min_value=1, max_value=10)

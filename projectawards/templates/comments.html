@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+    {% block styles %}
+        <link rel="stylesheet" href="{% static 'css/comments.css' %}">
+    {% endblock %}
+
+{% block content %}
+    {{block.super}}
+
+    <div class="container">
+        {% if user.is_authenticated %}
+            <div class="the-project">
+                <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">{{project.project}}</h4>
+                      <h6 class="card-subtitle mb-2 text-muted">Project By: {{project.project_owner}}</h6>
+                      <p class="card-text">
+                        {{project.project_description}}
+                      </p>
+                      <!--
+                        <a href="#!" class="card-link">Card link</a>
+                        <a href="#!" class="card-link">Another link</a>
+                      -->
+                    </div>
+                  </div>
+            </div>
+            <hr>
+            <div class="comment-form">
+                <form action="{% url 'commenting' project.id profile.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+    
+                    {% bootstrap_form CommentForm %}
+                    <div class="form-group text-right">
+                        <input type="submit" value="Comment" class="btn btn-outline-primary">
+                    </div>
+                </form>
+            </div>
+            <hr>
+            <div class="previous-comments">
+                <ul class="text-center">
+                    {% for comments in old_comments %}
+                        <li>{{comments.comment}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-3">Login To Comment</h1>
+                </div>
+            </div>
+        {% endif %}
+{% endblock %}

@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
-from .models import Profile, Projects
+from .models import Profile, Projects, Comments
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileForm, ProjectsForm
+from .forms import ProfileForm, ProjectsForm, CommentForm
 
 # RestAPI Framework
 from rest_framework.response import Response
@@ -23,11 +23,12 @@ def index_test(request):
 def home(request):
     current_user = request.user
     profile = Profile.objects.get(user = current_user.id)
+    projects = Projects.objects.order_by('-id').all().select_related('project_owner')
 
     current_user = request.user
     title = "Home"
 
-    return render(request, 'home.html', {"current_user": current_user, "profile": profile, "title": title})
+    return render(request, 'home.html', {"current_user": current_user, "profile": profile, "title": title, "projects": projects})
 
 @login_required(login_url='/accounts/login')
 def profile(request, user_id):
@@ -88,6 +89,31 @@ def project_upload(request, user_id):
         form = ProjectsForm()
     
     return render(request, 'project_upload.html', {"title": title, "ProjectUploadForm": form, "profile": profile})
+
+@login_required(login_url='/accounts/login')
+def commenting(request, project_id, user_id):
+    current_user = request.user
+    title = "Comments"
+
+    profile = Profile.objects.get(user = user_id)
+    project = Projects.objects.get(id = project_id)
+
+    old_comments = Comments.objects.filter(for_project = project_id).all()
+    
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            new_comment = form.cleaned_data['comment']
+
+            add_comment = Comments(for_project = project, comment = new_comment, submitted_by = profile)
+            add_comment.save()
+
+            return redirect(home)
+    else:
+        form = CommentForm()
+    
+    return render(request, 'comments.html', {"title": title, "CommentForm": form, "project": project, "old_comments": old_comments, "profile": profile})
+
 
 # API Functionality
 class ProjectsList(APIView):

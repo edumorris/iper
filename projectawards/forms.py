@@ -12,3 +12,6 @@ class ProjectsForm(forms.Form):
     project = forms.CharField(label = 'Project Name:', max_length=50)
     description = forms.CharField(label = 'Project Description:', widget=forms.Textarea)
     repo = forms.CharField(label = 'Repository Link:', max_length=500)
+
+class CommentForm(forms.Form):
+    comment = forms.CharField(label = 'Comments:', max_length=2000)

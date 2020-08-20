@@ -1,0 +1,30 @@
+.projects-container {
+    margin: 30px auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.projects-container .card {
+    max-width: 400px !important;
+    min-width: 400px !important;
+    height: auto;
+}
+
+.project-owner {
+    float: right;
+    margin: 5px;
+    font-size: smaller;
+    font-family: 'cursive';
+}
+
+
+.footer-content {
+    display: inline-block;
+}
+
+
+.comments-button, review-button {
+    margin: 5px;
+}
